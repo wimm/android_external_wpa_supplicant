@@ -1004,7 +1004,7 @@ static void wpa_supplicant_scan(void *eloop_ctx, void *timeout_ctx)
 	struct wpa_supplicant *wpa_s = eloop_ctx;
 	struct wpa_ssid *ssid;
 	int enabled, scan_req = 0, ret;
-
+	
 	if (wpa_s->disconnected && !wpa_s->scan_req)
 		return;
 
@@ -1031,7 +1031,7 @@ static void wpa_supplicant_scan(void *eloop_ctx, void *timeout_ctx)
 			   "ap_scan configuration");
 		wpa_s->conf->ap_scan = 0;
 	}
-
+	
 	if (wpa_s->conf->ap_scan == 0) {
 		wpa_supplicant_gen_assoc_event(wpa_s);
 		return;
@@ -1109,6 +1109,8 @@ static void wpa_supplicant_scan(void *eloop_ctx, void *timeout_ctx)
 	}
 	if (ret) {
 		wpa_printf(MSG_WARNING, "Failed to initiate AP scan.");
+		wpa_msg(wpa_s, MSG_INFO, WPA_EVENT_DRIVER_STATE "HANGED");  //for_ticket#590
+
 		wpa_supplicant_req_scan(wpa_s, 10, 0);
 	}
 	else
